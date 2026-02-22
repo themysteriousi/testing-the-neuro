@@ -7,6 +7,7 @@ export default function ClientDashboard() {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // LIVE DATA STATES
   const [clientData, setClientData] = useState(null);
@@ -75,6 +76,11 @@ export default function ClientDashboard() {
   const handleLogout = async () => {
     await logout();
     navigate("/login");
+  };
+
+  const handleTabClick = (id) => {
+    setActiveTab(id);
+    setMobileSidebarOpen(false);
   };
 
   const sendMessage = async () => {
@@ -168,9 +174,13 @@ export default function ClientDashboard() {
   if (loading) return <div style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--orange)" }}>LOADING NEXUS SECURE PORTAL...</div>;
 
   return (
-    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden", position: "relative" }}>
+
+      {/* Sidebar Overlay */}
+      <div className={`sidebar-overlay ${mobileSidebarOpen ? "active" : ""}`} onClick={() => setMobileSidebarOpen(false)} />
+
       {/* Sidebar */}
-      <div style={{ width: "240px", flexShrink: 0, background: "var(--black2)", borderRight: "1px solid var(--border)", display: "flex", flexDirection: "column", padding: "20px 12px" }}>
+      <div className={`dashboard-sidebar ${mobileSidebarOpen ? "open" : ""}`} style={{ width: "240px", flexShrink: 0, background: "var(--black2)", borderRight: "1px solid var(--border)", display: "flex", flexDirection: "column", padding: "20px 12px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px", marginBottom: "32px" }}>
           <div style={{ width: "32px", height: "32px", background: "var(--orange)", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue'", fontSize: "18px" }}>N</div>
           <span style={{ fontFamily: "'Bebas Neue'", fontSize: "20px", letterSpacing: "0.1em" }}>NEXUS</span>
@@ -178,7 +188,7 @@ export default function ClientDashboard() {
 
         <nav style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           {sidebarItems.map(item => (
-            <div key={item.id} className={`sidebar-item ${activeTab === item.id ? "active" : ""}`} onClick={() => setActiveTab(item.id)}>
+            <div key={item.id} className={`sidebar-item ${activeTab === item.id ? "active" : ""}`} onClick={() => handleTabClick(item.id)}>
               <span style={{ fontSize: "16px" }}>{item.icon}</span>
               <span>{item.label}</span>
             </div>
@@ -204,9 +214,12 @@ export default function ClientDashboard() {
 
       {/* Main content */}
       <div style={{ flex: 1, overflow: "auto", background: "var(--black)" }}>
-        <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(8,8,8,0.9)", backdropFilter: "blur(20px)", zIndex: 100 }}>
-          <div><h1 style={{ fontSize: "24px", fontWeight: 700 }}>{sidebarItems.find(s => s.id === activeTab)?.label}</h1></div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "20px", background: "rgba(0,255,148,0.1)", border: "1px solid rgba(0,255,148,0.2)" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(8,8,8,0.9)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <button className="mobile-menu-btn" onClick={() => setMobileSidebarOpen(true)}>☰</button>
+            <h1 style={{ fontSize: "18px", fontWeight: 700 }}>{sidebarItems.find(s => s.id === activeTab)?.label}</h1>
+          </div>
+          <div className="desktop-only" style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "20px", background: "rgba(0,255,148,0.1)", border: "1px solid rgba(0,255,148,0.2)" }}>
             <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--neon-green)", animation: "pulse-green 2s infinite" }} />
             <span style={{ fontSize: "12px", color: "var(--neon-green)", fontFamily: "'JetBrains Mono'" }}>{liveCampaignsCount} CAMPAIGNS LIVE</span>
           </div>

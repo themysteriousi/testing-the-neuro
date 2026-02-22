@@ -306,3 +306,137 @@ tr:hover td { background: rgba(255,85,0,0.02); }
   border-radius: 2px;
   animation: wave 1.2s ease-in-out infinite;
 }
+
+/* ========================================
+   MOBILE RESPONSIVE STYLES
+   ======================================== */
+
+/* --- Mobile sidebar toggle --- */
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.mobile-menu-btn:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+/* --- Tablet (≤1024px) --- */
+@media (max-width: 1024px) {
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 998;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  th, td {
+    padding: 10px 12px !important;
+  }
+}
+
+/* --- Phone (≤768px) --- */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* Dashboard sidebar becomes a slide-out drawer */
+  .dashboard-sidebar {
+    position: fixed !important;
+    left: -280px;
+    top: 0;
+    bottom: 0;
+    width: 260px !important;
+    z-index: 999;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+  }
+
+  .dashboard-sidebar.open {
+    left: 0;
+    box-shadow: 4px 0 30px rgba(0,0,0,0.5);
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  /* Table becomes scrollable */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 12px;
+  }
+
+  thead {
+    white-space: nowrap;
+  }
+
+  th, td {
+    padding: 10px 10px !important;
+    font-size: 12px !important;
+    min-width: 90px;
+  }
+
+  /* Sidebar items */
+  .sidebar-item {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+  /* Fix card hover on mobile (no hover) */
+  .card-hover:hover {
+    transform: none;
+  }
+}
+
+/* --- Small Phone (≤480px) --- */
+@media (max-width: 480px) {
+  .btn-primary {
+    font-size: 13px !important;
+    padding: 12px 20px !important;
+  }
+
+  .btn-ghost {
+    font-size: 12px !important;
+    padding: 10px 16px !important;
+  }
+
+  .tag {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  th, td {
+    padding: 8px 8px !important;
+    font-size: 11px !important;
+    min-width: 70px;
+  }
+}
