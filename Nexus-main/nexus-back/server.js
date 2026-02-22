@@ -1,12 +1,20 @@
 // server.js
 const express = require('express');
 const cors = require('cors');
-
+require('dotenv').config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Middleware - Allow requests from your Vercel frontend
+const allowedOrigins = [
+  'http://localhost:5173', // Local Vite dev
+  process.env.FRONTEND_URL  // Your Vercel URL (set in Render env vars)
+].filter(Boolean);
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json()); // Parses incoming JSON requests
 
 // Import your routes file
